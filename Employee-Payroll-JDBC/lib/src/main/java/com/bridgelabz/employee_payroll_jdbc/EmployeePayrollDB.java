@@ -42,7 +42,22 @@ public class EmployeePayrollDB {
 			}
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate(String.format("insert into employee_payroll values (%d,'%s','M',00,'NA','NA',%d,0,0,0,0,0,'%s')",id,name,salary,date));
-			
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
+	public void getSalaryByName(Connection con, String name) throws SQLException {
+		try {
+			PreparedStatement stmt=con.prepareStatement(String.format("select salary from employee_payroll where name = '%s'",name)); 
+			ResultSet rs=stmt.executeQuery();
+			while(rs.next())System.out.println(rs.getInt(1));
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
+	public void getSalaryByDateRange(Connection con,String fromDate)  throws SQLException {
+		try {
+			PreparedStatement stmt=con.prepareStatement(String.format("SELECT * FROM employee_payroll WHERE start BETWEEN CAST('%s' AS DATE) AND DATE(NOW())",fromDate)); 
+			ResultSet rs=stmt.executeQuery();
+			printData(rs);
 		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
