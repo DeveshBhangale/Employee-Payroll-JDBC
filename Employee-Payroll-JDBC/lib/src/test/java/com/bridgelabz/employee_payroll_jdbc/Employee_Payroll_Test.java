@@ -28,7 +28,8 @@ public class Employee_Payroll_Test {
 		}
 	}
 	
-	@Test //UC3
+	
+	@Test //UC3 & UC4
 	public void updateBasePayByName() throws Exception {
 		Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
 		employeePayrollDB.updateBasePayByName(con, "Terisa", 3000000.00);
@@ -42,5 +43,12 @@ public class Employee_Payroll_Test {
 		employeePayrollDB.getSalaryByDateRange(con, "2019-11-13");
 	}
 	
-	
+	@Test //UC6
+	public void getSumAvgMinMaxCountOfEmployees()throws Exception{
+		Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
+		employeePayrollDB.getSumOfSalaryByGender(con, "M");
+		employeePayrollDB.getAvgOfSalaryByGender(con, "M");
+		employeePayrollDB.getMinOfSalaryByGender(con, "M");
+		employeePayrollDB.getCountOfNameByGender(con);
+	}
 }

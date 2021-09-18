@@ -61,6 +61,46 @@ public class EmployeePayrollDB {
 		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
+	public void getSumOfSalaryByGender(Connection con, String gender) throws SQLException {
+		try {
+			PreparedStatement stmt=con.prepareStatement(String.format("select sum(salary) from employee_payroll where gender = '%s'",gender)); 
+			ResultSet rs=stmt.executeQuery();
+			while(rs.next())System.out.println(rs.getInt(1));
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
+	public void getAvgOfSalaryByGender(Connection con, String gender) throws SQLException {
+		try {
+			PreparedStatement stmt=con.prepareStatement(String.format("select avg(salary) from employee_payroll where gender = '%s'",gender)); 
+			ResultSet rs=stmt.executeQuery();
+			while(rs.next())System.out.println(rs.getInt(1));
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
+	public void getMinOfSalaryByGender(Connection con, String gender) throws SQLException {
+		try {
+			PreparedStatement stmt=con.prepareStatement(String.format("select min(salary) from employee_payroll where gender = '%s'",gender)); 
+			ResultSet rs=stmt.executeQuery();
+			while(rs.next())System.out.println(rs.getInt(1));
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
+	public void getMaxOfSalaryByGender(Connection con, String gender) throws SQLException {
+		try {
+			PreparedStatement stmt=con.prepareStatement(String.format("select max(salary) from employee_payroll where gender = '%s'",gender)); 
+			ResultSet rs=stmt.executeQuery();
+			while(rs.next())System.out.println(rs.getInt(1));
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
+	public void getCountOfNameByGender(Connection con) throws SQLException {
+		try {
+			PreparedStatement stmt=con.prepareStatement("select gender, count(name) from employee_payroll group by gender"); 
+			ResultSet rs=stmt.executeQuery();
+			while(rs.next())System.out.println(rs.getString(1)+" "+rs.getString(2));
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
 	public void updateGenderByName(Connection con, String name,String gender) throws SQLException {
 		try {
 			String query ="update employee_payroll set gender=? where name=?";
