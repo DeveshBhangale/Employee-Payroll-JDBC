@@ -61,6 +61,17 @@ public class EmployeePayrollDB {
 		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
+	public void updateGenderByName(Connection con, String name,String gender) throws SQLException {
+		try {
+			String query ="update employee_payroll set gender=? where name=?";
+			PreparedStatement stmt=con.prepareStatement(query);
+			stmt.setString(1, gender);
+			stmt.setString(2, name);
+			stmt.executeUpdate();
+			System.out.println("Updated !");
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
 	public void printData(ResultSet rs) throws SQLException {
 		try {
 			rs.toString();
