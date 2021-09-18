@@ -72,6 +72,17 @@ public class EmployeePayrollDB {
 		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
+	public void updateBasePayByName(Connection con, String name,double basePay) throws SQLException {
+		try {
+			String query ="update employee_payroll set basicPay=? where name=?";
+			PreparedStatement stmt=con.prepareStatement(query);
+			stmt.setDouble(1, basePay);
+			stmt.setString(2, name);
+			stmt.executeUpdate();
+			System.out.println("Updated !");
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
 	public void printData(ResultSet rs) throws SQLException {
 		try {
 			rs.toString();

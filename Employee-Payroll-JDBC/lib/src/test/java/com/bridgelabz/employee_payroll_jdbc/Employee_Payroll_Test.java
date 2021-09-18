@@ -16,7 +16,7 @@ public class Employee_Payroll_Test {
 			}catch(Exception e){e.printStackTrace();}  
 	}
 	
-	@Test // UC 2 & 4
+	@Test // UC 2
 	public void getDataFromTable() throws Exception {
 		try {
 			Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
@@ -27,6 +27,12 @@ public class Employee_Payroll_Test {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test //UC3
+	public void updateBasePayByName() throws Exception {
+		Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
+		employeePayrollDB.updateBasePayByName(con, "Terisa", 3000000.00);
+	}
 
 	
 	@Test //UC5
@@ -36,9 +42,5 @@ public class Employee_Payroll_Test {
 		employeePayrollDB.getSalaryByDateRange(con, "2019-11-13");
 	}
 	
-	@Test //UC6
-	public void updateGenderByName() throws Exception {
-		Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
-		employeePayrollDB.updateGenderByName(con, "Bill", "M");
-	}
+	
 }
