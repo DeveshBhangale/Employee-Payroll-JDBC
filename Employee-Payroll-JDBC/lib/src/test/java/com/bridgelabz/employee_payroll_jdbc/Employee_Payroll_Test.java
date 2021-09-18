@@ -8,7 +8,7 @@ public class Employee_Payroll_Test {
 	public static EmployeePayrollDB employeePayrollDB = new EmployeePayrollDB();
 	
 	
-	@Test
+	@Test //UC1
 	public void connection() {
 		try{  
 			Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
@@ -16,7 +16,7 @@ public class Employee_Payroll_Test {
 			}catch(Exception e){e.printStackTrace();}  
 	}
 	
-	@Test // UC 2 & 4
+	@Test // UC 2
 	public void getDataFromTable() throws Exception {
 		try {
 			Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
@@ -28,11 +28,19 @@ public class Employee_Payroll_Test {
 		}
 	}
 	
-	@Test
-	public void insertData() throws Exception {
+	@Test //UC3 & UC4
+	public void updateBasePayByName() throws Exception {
 		Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
-		employeePayrollDB.insertDataIntoTable(con,"pooh",10000,"2021-08-02");
-		employeePayrollDB.insertDataIntoTable(con,"john",10022300,"2020-10-02");
+		employeePayrollDB.updateBasePayByName(con, "Terisa", 3000000.00);
 	}
 
+	
+	@Test //UC5
+	public void getSalaryByNameAndDateRange() throws Exception {
+		Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
+		employeePayrollDB.getSalaryByName(con,"dev");
+		employeePayrollDB.getSalaryByDateRange(con, "2019-11-13");
+	}
+	
+	
 }
