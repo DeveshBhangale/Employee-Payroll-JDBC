@@ -13,7 +13,7 @@ public class EmployeePayrollDB {
 		return null;
 	}
 	
-	public void getDataFromTable(Connection con,EmployeePayrollDB employeePayrollDB) throws SQLException {
+	public void getDataFromTable(Connection con) throws SQLException {
 		try{
 			ResultSet rs;
 			DatabaseMetaData dbm = con.getMetaData();
@@ -23,13 +23,27 @@ public class EmployeePayrollDB {
 				if(tName != null && tName.equals("employee_payroll")) {
 					PreparedStatement stmt=con.prepareStatement("select * from employee_payroll"); 
 					rs=stmt.executeQuery();
-					employeePayrollDB.printData(rs);}
+					printData(rs);}
 			}else {
 				Statement stmt=con.createStatement(); 
 				stmt.execute("CREATE TABLE employee_payroll (id INTEGER unsigned NOT NULL AUTO_INCREMENT,name VARCHAR(150) NOT NULL,salary Double NOT NULL,start DATE NOT NULL,PRIMARY KEY (id))");
 				System.out.println("New Table Created");
 		}}catch(SQLException e) {e.printStackTrace();}
 		
+	}
+	
+	public void insertDataIntoTable(Connection con,String name,int salary,String date)throws SQLException {
+		try {
+			PreparedStatement ps=con.prepareStatement("insert into employee_payroll (name) values(?)",Statement.RETURN_GENERATED_KEYS);
+			ResultSet a=ps.getGeneratedKeys();
+			int id = 0;
+			if(a.next()){
+			id=a.getInt(1);
+			}
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate(String.format("insert into employee_payroll values (%d,'%s','M',00,'NA','NA',%d,0,0,0,0,0,'%s')",id,name,salary,date));
+			
+		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
 	public void printData(ResultSet rs) throws SQLException {
