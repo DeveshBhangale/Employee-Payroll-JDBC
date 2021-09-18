@@ -16,7 +16,7 @@ public class Employee_Payroll_Test {
 			}catch(Exception e){e.printStackTrace();}  
 	}
 	
-	@Test
+	@Test // UC 2 & 4
 	public void getDataFromTable() throws Exception {
 		try {
 			Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
