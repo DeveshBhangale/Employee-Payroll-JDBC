@@ -41,7 +41,7 @@ public class EmployeePayrollDB {
 		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
-	public void insertDataIntoTable(Connection con,String name,int salary,String date)throws SQLException {
+	public void insertDataIntoTable(Connection con,String name,double salary,String date)throws SQLException {
 		try {
 			PreparedStatement ps=con.prepareStatement("insert into employee_payroll (name) values(?)",Statement.RETURN_GENERATED_KEYS);
 			ResultSet a=ps.getGeneratedKeys();
@@ -50,14 +50,37 @@ public class EmployeePayrollDB {
 			id=a.getInt(1);
 			}
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate(String.format("insert into employee_payroll values (%d,'%s','N',%d,'%s')",id,name,salary,date));
+			stmt.executeUpdate(String.format("insert into employee_payroll values (%d,'%s','N',%.2f,'%s')",id,name,salary,date));
 			updateIDSequentially(con);
-			System.out.println("Data inserted !");
+			System.out.println("Data inserted in employee_payroll!");
+			insertIntoPayroll_details(con, id,salary);
 		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
+	private void insertIntoPayroll_details(Connection con, int id, double salary) throws SQLException {
+		try {
+			Statement stmt = con.createStatement();
+			stmt.execute("set FOREIGN_KEY_CHECKS=0");
+			double deductions = 0.2 * salary;
+			double taxablePay = salary - deductions;
+			double tax = 0.1 * taxablePay;
+			double netPay = salary - tax;
+			PreparedStatement ps=con.prepareStatement("insert into payroll_details values (?,?,?,?,?,?);");
+			ps.setInt(1, id);
+			ps.setDouble(2, salary);
+			ps.setDouble(3, deductions);
+			ps.setDouble(4, taxablePay);
+			ps.setDouble(5, tax);
+			ps.setDouble(6, netPay);
+			ps.executeUpdate();
+			stmt.execute("set FOREIGN_KEY_CHECKS=1");
+			System.out.println("Updated in payroll_details !");
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+
 	public void getSalaryByName(Connection con, String name) throws SQLException {
 		try {
+			
 			PreparedStatement stmt=con.prepareStatement(String.format("select salary from employee_payroll where name = '%s'",name)); 
 			ResultSet rs=stmt.executeQuery();
 			while(rs.next())System.out.println(rs.getInt(1));
@@ -123,11 +146,11 @@ public class EmployeePayrollDB {
 		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
-	public void updateBasePayByName(Connection con, String name,double basePay) throws SQLException {
+	public void updateBasePayByName(Connection con, String name,double salary) throws SQLException {
 		try {
 			String query ="update employee_payroll set salary=? where name=?";
 			PreparedStatement stmt=con.prepareStatement(query);
-			stmt.setDouble(1, basePay);
+			stmt.setDouble(1, salary);
 			stmt.setString(2, name);
 			stmt.executeUpdate();
 			System.out.println("Updated !");
