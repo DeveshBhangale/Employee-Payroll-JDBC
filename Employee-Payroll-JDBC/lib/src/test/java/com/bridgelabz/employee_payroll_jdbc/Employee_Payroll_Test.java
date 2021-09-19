@@ -51,4 +51,11 @@ public class Employee_Payroll_Test {
 		employeePayrollDB.getMinOfSalaryByGender(con, "M");
 		employeePayrollDB.getCountOfNameByGender(con);
 	}
+	
+	@Test //UC7
+	public void insertDataIntoEmployee_Payroll() throws Exception {
+		Connection con = employeePayrollDB.connectDb("payroll_service","root","database");
+		employeePayrollDB.insertDataIntoTable(con,"Venkat",1000012,"2021-08-02");
+		employeePayrollDB.insertDataIntoTable(con,"john",10022300,"2020-10-02");
+	}
 }

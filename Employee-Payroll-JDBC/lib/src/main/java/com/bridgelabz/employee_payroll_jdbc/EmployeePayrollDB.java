@@ -32,6 +32,15 @@ public class EmployeePayrollDB {
 		
 	}
 	
+	public void updateIDSequentially(Connection con) throws SQLException {
+		try {
+		PreparedStatement ps=con.prepareStatement("SET  @num := 0;");
+		ps.executeUpdate();
+		ps=con.prepareStatement("UPDATE employee_payroll SET id = @num := (@num+1);");
+		ps.executeUpdate();
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
 	public void insertDataIntoTable(Connection con,String name,int salary,String date)throws SQLException {
 		try {
 			PreparedStatement ps=con.prepareStatement("insert into employee_payroll (name) values(?)",Statement.RETURN_GENERATED_KEYS);
@@ -42,6 +51,8 @@ public class EmployeePayrollDB {
 			}
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate(String.format("insert into employee_payroll values (%d,'%s','M',00,'NA','NA',%d,0,0,0,0,0,'%s')",id,name,salary,date));
+			updateIDSequentially(con);
+			System.out.println("Data inserted !");
 		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
@@ -125,7 +136,6 @@ public class EmployeePayrollDB {
 	
 	public void printData(ResultSet rs) throws SQLException {
 		try {
-			rs.toString();
 			while(rs.next())  
 				System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3)
 							+" "+rs.getInt(4)+"  "+rs.getString(5)+"  "+rs.getString(6)
