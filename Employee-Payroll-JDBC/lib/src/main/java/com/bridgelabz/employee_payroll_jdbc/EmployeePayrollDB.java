@@ -26,7 +26,7 @@ public class EmployeePayrollDB {
 					printData(rs);}
 			}else {
 				Statement stmt=con.createStatement(); 
-				stmt.execute("CREATE TABLE employee_payroll (id INTEGER unsigned NOT NULL AUTO_INCREMENT,name VARCHAR(150) NOT NULL,salary Double NOT NULL,start DATE NOT NULL,PRIMARY KEY (id))");
+				stmt.execute("CREATE TABLE employee_payroll (id INTEGER unsigned NOT NULL AUTO_INCREMENT,name VARCHAR(150) NOT NULL,gender varchar(20) not null,salary Double NOT NULL,start DATE NOT NULL,PRIMARY KEY (id))");
 				System.out.println("New Table Created");
 		}}catch(SQLException e) {e.printStackTrace();}
 		
@@ -50,7 +50,7 @@ public class EmployeePayrollDB {
 			id=a.getInt(1);
 			}
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate(String.format("insert into employee_payroll values (%d,'%s','M',00,'NA','NA',%d,0,0,0,0,0,'%s')",id,name,salary,date));
+			stmt.executeUpdate(String.format("insert into employee_payroll values (%d,'%s','N',%d,'%s')",id,name,salary,date));
 			updateIDSequentially(con);
 			System.out.println("Data inserted !");
 		}catch(SQLException e) {e.printStackTrace();}
@@ -125,7 +125,7 @@ public class EmployeePayrollDB {
 	
 	public void updateBasePayByName(Connection con, String name,double basePay) throws SQLException {
 		try {
-			String query ="update employee_payroll set basicPay=? where name=?";
+			String query ="update employee_payroll set salary=? where name=?";
 			PreparedStatement stmt=con.prepareStatement(query);
 			stmt.setDouble(1, basePay);
 			stmt.setString(2, name);
@@ -138,9 +138,7 @@ public class EmployeePayrollDB {
 		try {
 			while(rs.next())  
 				System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3)
-							+" "+rs.getInt(4)+"  "+rs.getString(5)+"  "+rs.getString(6)
-							+" "+rs.getInt(7)+"  "+rs.getInt(8)+"  "+rs.getInt(9)
-							+" "+rs.getInt(10)+"  "+rs.getInt(11)+"  "+rs.getInt(12)+" "+rs.getString(13));
+							+" "+rs.getInt(4)+"  "+rs.getString(5));
 			}catch(SQLException e){ e.printStackTrace();}
 	}
 
