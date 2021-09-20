@@ -52,7 +52,7 @@ public class EmployeePayrollDB {
 		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
-	public void deleteDataOnCascade(Connection con,String name) throws SQLException {
+	public void deleteDataOnCascade(Connection con,String name)throws SQLException {
 		try  {
 			PreparedStatement ps = con.prepareStatement("delete from employee_payroll where name = ?");
 			ps.setString(1, name);

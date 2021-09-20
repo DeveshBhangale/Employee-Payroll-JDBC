@@ -58,5 +58,6 @@ public class Employee_Payroll_Test {
 		employeePayrollDB.insertDataIntoTable(con,"Venkat",1000012,"2021-08-02");
 		employeePayrollDB.insertDataIntoTable(con,"john",10022300,"2020-10-02");
 		employeePayrollDB.deleteDataOnCascade(con, "Venkat");
+		employeePayrollDB.deleteDataOnCascade(con, "john");
 	}
 }
