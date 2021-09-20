@@ -43,29 +43,37 @@ public class EmployeePayrollDB {
 	
 	public void insertDataIntoTable(Connection con,String name,double salary,String date)throws SQLException {
 		try {
-			PreparedStatement ps=con.prepareStatement("insert into employee_payroll (name) values(?)",Statement.RETURN_GENERATED_KEYS);
-			ResultSet a=ps.getGeneratedKeys();
 			int id = 0;
-			if(a.next()){
-			id=a.getInt(1);
-			}
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate(String.format("insert into employee_payroll values (%d,'%s','N',%.2f,'%s')",id,name,salary,date));
-			updateIDSequentially(con);
 			System.out.println("Data inserted in employee_payroll!");
-			insertIntoPayroll_details(con, id,salary);
+			updateIDSequentially(con);
+			insertIntoPayroll_details(con,salary);
 		}catch(SQLException e) {e.printStackTrace();}
 	}
 	
-	private void insertIntoPayroll_details(Connection con, int id, double salary) throws SQLException {
+	public void deleteDataOnCascade(Connection con,String name) throws SQLException {
+		try  {
+			PreparedStatement ps = con.prepareStatement("delete from employee_payroll where name = ?");
+			ps.setString(1, name);
+			ps.executeUpdate();
+			updateIDSequentially(con);
+			System.out.println(name + " data deleted !!");
+		}catch(SQLException e) {e.printStackTrace();}
+	}
+	
+	private void insertIntoPayroll_details(Connection con, double salary) throws SQLException {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.execute("set FOREIGN_KEY_CHECKS=0");
 			double deductions = 0.2 * salary;
 			double taxablePay = salary - deductions;
 			double tax = 0.1 * taxablePay;
 			double netPay = salary - tax;
-			PreparedStatement ps=con.prepareStatement("insert into payroll_details values (?,?,?,?,?,?);");
+			ResultSet a = stmt.executeQuery("select max(id) from employee_payroll");
+			int id = 0;
+			while(a.next()) id = a.getInt(1);
+			stmt.execute("set FOREIGN_KEY_CHECKS=0");
+			PreparedStatement ps=con.prepareStatement("insert into payroll_details (id,basicPay,deductions,taxablePay,tax,net_pay) values ( ?,?,?,?,?,?);");
 			ps.setInt(1, id);
 			ps.setDouble(2, salary);
 			ps.setDouble(3, deductions);
